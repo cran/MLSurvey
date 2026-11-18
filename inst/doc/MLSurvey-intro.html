@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Getting Started with MLSurvey</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Getting Started with MLSurvey</h1>
+
+
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p><code>MLSurvey</code> fits machine learning models – elastic net,
+XGBoost, and random forest – to complex survey data, incorporating
+sampling weights, strata, and clusters via a replicate-weights approach.
+This vignette walks through the core elastic net workflow:</p>
+<ol style="list-style-type: decimal">
+<li>Fitting a single model with <code>wElnet()</code></li>
+<li>Searching across multiple <code>alpha</code> values in parallel with
+<code>par_wElnet()</code></li>
+<li>Visualizing results with both base R and <code>ggplot2</code></li>
+</ol>
+<p>To keep this vignette fast and self-contained, we use a small
+synthetic survey-style data set rather than a real NHANES extract. The
+same workflow applies directly to real survey data with a
+<code>cluster</code>, <code>strata</code>, and <code>weights</code>
+column (or an equivalent <code>survey::svydesign()</code> object).</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(MLSurvey)</span></code></pre></div>
+</div>
+<div id="a-small-synthetic-survey-data-set" class="section level2">
+<h2>A small synthetic survey data set</h2>
+<p>A complex survey data set typically includes:</p>
+<ul>
+<li>A <strong>cluster</strong> identifier (primary sampling unit,
+PSU)</li>
+<li>A <strong>strata</strong> identifier</li>
+<li>A <strong>sampling weight</strong></li>
+<li>One or more <strong>predictors</strong></li>
+<li>A <strong>response variable</strong></li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">240</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>survey_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="at">psu     =</span> <span class="fu">rep</span>(<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">each =</span> n <span class="sc">/</span> <span class="dv">12</span>), <span class="at">times =</span> <span class="dv">4</span>),</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="at">strata  =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">each =</span> n <span class="sc">/</span> <span class="dv">4</span>),</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="at">weight  =</span> <span class="fu">runif</span>(n, <span class="dv">500</span>, <span class="dv">5000</span>),</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="at">x1 =</span> <span class="fu">rnorm</span>(n),</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  <span class="at">x2 =</span> <span class="fu">rnorm</span>(n),</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  <span class="at">x3 =</span> <span class="fu">rnorm</span>(n),</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>  <span class="at">x4 =</span> <span class="fu">rnorm</span>(n),</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  <span class="at">y  =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">length.out =</span> n)  <span class="co"># binary outcome</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>)</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="fu">head</span>(survey_data)</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt;   psu strata   weight         x1         x2         x3         x4 y</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt; 1   1      1 1694.789 -0.5059575 -2.5923277 -0.3410670  2.0057186 0</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co">#&gt; 2   1      1 2174.558  1.3430388  1.3140022  1.5024245 -2.0705715 1</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&gt; 3   1      1 3077.840 -0.2145794 -0.6355430  0.5283077  3.0557424 0</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&gt; 4   1      1 4586.935 -0.1795565 -0.4299788  0.5421914 -0.2613506 1</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="co">#&gt; 5   1      1 1407.569 -0.1001907 -0.1693183 -0.1366734 -0.4543933 0</span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="co">#&gt; 6   1      1 4542.754  0.7126663  0.6122182 -1.1367339  0.1575606 1</span></span></code></pre></div>
+</div>
+<div id="fitting-a-single-model-with-welnet" class="section level2">
+<h2>Fitting a single model with <code>wElnet()</code></h2>
+<p><code>wElnet()</code> fits a weighted elastic net model for a single
+value of <code>alpha</code> (the mixing parameter between ridge and
+LASSO penalties), selecting the optimal <code>lambda</code> by
+replicate-weight cross-validation.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">wElnet</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="at">data    =</span> survey_data,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">col.y   =</span> <span class="st">&quot;y&quot;</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">col.x   =</span> <span class="fu">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>, <span class="st">&quot;x3&quot;</span>, <span class="st">&quot;x4&quot;</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="at">family  =</span> <span class="st">&quot;binomial&quot;</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  <span class="at">alpha   =</span> <span class="fl">0.5</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  <span class="at">cluster =</span> <span class="st">&quot;psu&quot;</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  <span class="at">strata  =</span> <span class="st">&quot;strata&quot;</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  <span class="at">weights =</span> <span class="st">&quot;weight&quot;</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>  <span class="at">method  =</span> <span class="st">&quot;dCV&quot;</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>  <span class="at">k =</span> <span class="dv">4</span>, <span class="at">R =</span> <span class="dv">1</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>)</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>fit</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; Weighted Elastic Net (wElnet)</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; alpha:             0.5 </span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; lambda (min):      0.05908 </span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; Weighted error at min: 0.6964 </span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt; Nonzero coefs:     0 </span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt; Lambda grid size:  29</span></span></code></pre></div>
+<p>Printing the fitted object (via <code>print.w.elnet()</code>)
+summarizes the key results: the alpha used, the selected
+<code>lambda.min</code>, its weighted error, and the number of nonzero
+coefficients at that lambda.</p>
+<div id="visualizing-a-single-fit" class="section level3">
+<h3>Visualizing a single fit</h3>
+<p>Two plotting interfaces are available for <code>w.elnet</code>
+objects: a base R <code>plot()</code> method, and a
+<code>ggplot2</code>-based <code>autoplot()</code> method.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">plot</span>(fit)</span></code></pre></div>
+<p><img role="img" aria-label="Weighted error vs. log(lambda) for a single alpha" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkAAAAGACAMAAAByRC0tAAAA0lBMVEUAAAAAADoAAGYAOjoAOmYAOpAAZmYAZpAAZrY6AAA6ADo6AGY6OgA6Ojo6OmY6OpA6ZmY6ZpA6ZrY6kJA6kLY6kNtmAABmADpmAGZmOgBmOjpmZmZmkJBmkLZmkNtmtrZmtttmtv9/f3+QOgCQOjqQZgCQZjqQkDqQkGaQkLaQtpCQttuQ29uQ2/+2ZgC2Zjq2kGa2tma225C227a22/+2/9u2///bkDrbkGbbtmbbtpDbtrbb27bb29vb////AAD/tmb/25D/27b//7b//9v///83B+oTAAAACXBIWXMAAA7DAAAOwwHHb6hkAAASmUlEQVR4nO2dCWOsthVGsfvcerK0SRvPa9K06dhtuiSm2+ujSVMPkzH//y8VbWwDDOheCQm+kxfPguYOhmPpSoBICgAIJEuvAIgbCARIQCBAAgIBEhAIkIBAgAQEAiQgECABgQAJCARIQCBAAgIBEhAIkIBAgAQEAiQgECABgQAJCARIQCBAAgIBEhAIkIBAgAQEAiQgECABgQAJCARIQCBAAgIBEhAIkIBAgAQEAiQgECARv0BZYrh74Yv6+rddknz6VMZ8feoNfN7fPDfLX5TKklaBa1+XJDe/rQPoX+q+OO1u389dd69AoH5yEfCzEYGy9rs0gcpPK18MqRGoXPIwe+V9AoGGoprd3y9Qd8fSBCrLflP8J0kO+vV5X0XPWH8tftYgUKOSL/fEXz9Pbt+Zx6L4/osk+YlsHOr3CvEnfvuvcsmbd60FVWFZA9x826iBZCPzy2pf5kqP7z8vy/382QjUifpt+Zk30qKqnOS008prxcoP35ufpsDh8mmQrE4gVRWZR1M/CQWyZjWVNnZhT+ELgco6QfDmfetb8yqIEagbNemUk3QF0hVOWlU2ZfmPS+HeFa3KKEjWIJDhIF/cvSv+Vz2Wu0qJ8VAvk5S7uqxyvpN5R39hY0VVt7wTBfTOrOqMn72odyuBOlFltEY5SVcgvSSt/hTSxuI07DZsfQId9JvyUe8T+ZAljcYgVS9aC9qFWwLpeqCq7crXurn54e8f6WRXCdSJWlUgulwvXYFev96V7n0vfW5oFSSrE0j9UetHk9rKl62sVu+W5oLLwrVAA3XG69eN3pKqpzpRlWl1uV4uaiDzm6mmcMZwgH/WIFA7iW4KZCqKXNjVJ1BzwWXhWqA86RNI9L7f/OWHfVegRtSzXmjKmU+PN2GKHAL5YEwgzhqo1RdSu1z9PF8I1K2BGuXMp8eTaAUE8sKYQJdpjaGdrQwUbuVAreZHKSFrmk4S3YkqP9goZz7d7caXH6678acvdnWNBIEcU+dADRfM40XHytDuLw0UbvXCbn5f/Lg3dYQSSn7gx6dWEt2JamogU27odyijy4FE85U33xTf7WR5JNGOGRWoPQ7UFqgapRks/HoxDtQYnr6vjkC0BOpErXKgsSS6cShDxdFVlLQV3XjHjAukBpd/136vkH/X/y67Rp++GyvcEKj48eudLq6/VQ5PlyHefCMa0SoH6kSte2Gq3MAvIY7dyoOp5tu+MOPeoR8Mi18gO6gNQ96bmThobk67oFMgCGRJWTH0HKJyIFAedgsGgWzJ+hIaBwKlYbdgEMiW874nAL9AOKEMrBsIBEhAIEACAgESEAiQgECABAQCJCAQIAGBAAkIBEhAIEACAgESEAiQgECABAQCJCAQIAGBAAkIBEhAIEACAgESEAiQgECABAQCJCAQIAGBAAkIBEhAIECCWaAErISlBOINB5YCAgESEAiQgEBgDo/dNyAQmAMEAiQgECARrkDzBhXAQiwt0PD4k8XQFAiAYGog9S4sio2wBFKLbAbKwUIEKJBabnnEZRsc66enD3umh359qmbHP78duAFC7wfNx6tprPVTcVMXdW8XNR1+/eFQBTLFYNEFR/NPYi3QCOm9+Nd8msuX5/3DY3ZftCZPD1ygqjgsqjnK/zQOBBIf0WHN0/RBf9ejeCdLPomlBmp/BhYpjse6DRO7N0/Unci+3CX3p518+ptE3ynxp+UOV8sFjTLlB08f/inRd9jI1XY9mJDaO/309Q/mlRTovy/RNGE9H9y6REeDelnuyvP+UOQ3z69P4o6bdy+nD/TTg1iQ3Tzr5aJ0o4wQaPdQ5Je32LgU6Pz2I3HXqjLQYyYli1gg9elNS9TXhIlq4ulQ6P9lE5be5+IOisoE/dAoIwT64LmvCbwUSBQ8//q9SKI/e1qDQDLCViW6TKJFH+nmQqDsPtMCqeWidEcg8VmlwngTJp62HtYgkIyyUYna3XhZP/TUQA+6BtLLRelBgZr0JNFF0VRqPQLJSBu0qC2QSGPSTg0k7mBvciC9XJSeJNBlN15EOP3ipXToUS1Yk0Ay2hYtUpS7UtzK+TNV7VQCqV5Y2Xb9SlRNcrnoi08T6LyXo4ei766fZuoG03kS20DirJDbtcgfSx+NdxWujguLnLJ6gVRwWOSKbQikvgEW+WC9AqmvgUWOWblA6rtgkTu2IJD6QljEwYZyoN5vhURE/Ap02h2GFi24B+EQAT8Cnff1n/rl2QKzwzkAElniqQbK1WlKYdZAZg0gkQW+mjBx0lLgAgkgERlnOZA4/Bu8QAI4RMJdEp0lD1EIJIBE1jjshYnz4CIRqEBrNhGv3fjXp4gEEsChq2x8IHECcGgUXwKJk+BGRoECFqiAQ2N4EijTl6uZASFiOP/AoQH8CPT6VGmTqXNoSeGWAQ5NwtGhjCp57rnwcXa4xUBSfR3UQOPAoSu4yoF0FRRrDtQCEtX4OxamtvlA/ROXQAWGGSswDmQPHCogEJXNO+TrhLLBpssmXFhs2yFfAn2y60+ek1UkEyv4FdhwJNBD2RG75woXInBI40wgOZXDsEMr2PRwSDBfoMYo4RBKoEI6FPNI9FW2pxBDDtQ4TjFEJdCEcLGzMYc4kuihw1s1WxJoY00ZSw2UXDnXZ1a4VbAdhTCQ6IqNOORdoGzVSXSLTTVlFTYCicst9LzD7r83KjbokE0SLU/RyIavuGD93tjYmkP240BDp4oxf2+ErNkhxnGg0d581FdlMLBahxgEmlIDRX9VBgPrVIhlIPFqDrSic6JJrNAhlm781V7YWq7KoLM6hXBdmHdW51AbJ0fjV3ZVBpVVK+TkaPz6rsqgsl6HnByN5/zetbAShXA0fkHW4BCOxi9K/AoxDiTSiHorUojcIT+ntM4Jtz2iVsjPKa2zwm2RqB1qgyR6GVajEJLoxViHQhBoQSJUiKUbXzZidy8prS8W2XZzRXQtGUsSffOc3b1MuPZrWriNE5lCTONA4hj70PUWM8OBqFoypnEgIRCtNx/LBvNDPAox1kApTqpnJB6FOljnQLish5nIkiGDZS8MFxY6IEqFMA4UFME7hNM5QidwhSBQBITsEASKgnAVWlqgpIIl3IoJdCMtLZCrcGskUIU6zBSoOhkI5wN5IAaDrK+Nz2kDQcFvmDAIXyGbQxlq+nDMD+SD0NoxX/MDTQ8HrhCWQoyX9eBgqi9CUohnfiBRBWXIgfwRjkJcp7SOTJswOxyYQCgKYRwoWkJRqAMEiocgDcJVGTERoEK4KiMqFm/HcFVG7CysEK7KiJ9FFcJVGWtgQYX4rkzFVRlLsphBfAOJuCpjWZbOpg0YB4qVxTtkejVmFzy/VXUPkuilCcIge4HQjV8e/wqRc6C0PqV1bCBx6/cL84X3doxjHOjt9fQZ9wvzhmeDcLee9eFVIQ6BrjZPuF+YX3waxCFQejV7Rg3kmQX7YzbHwnC/sOBYziD7qzJGwf3CfLOUQvbXhXn6XjARPwZx5ECnHcPdViAQPz4Uogo09dp4DCQugQeDPF2VgYHEhXCuEAYSV45rgzjvmZoMnlKGgcQF8dwds5/eJTkMjgihBloSvwaRpncZnOEFA4mL4tMg0vQuw+eUYSBxUdwZxDi9i6iB7M8pg0BOcdaM8UzvonMgypg0BHKLK4P4rsooK5/Bw/Ln/dVrxiCQa9wY5Gcc6Lz/ZNefPNfj2DPCASucbGRfAj2UHbHR9g0CucfL36kzgUSWNOIQBPKAD4NmH0x9qEaix05prQ6FDZWCQF5wb5DDGogtHLCH2yB/ORBjOECAuRnj6sZjirto4DWIb3oXTHEXDZwGeZ/ibqgUBPIIo0GY4m6TOOyM2ddAmOIuItwZZJ0DYYq7qHBmkPXB1PEp7nBVRmgwGYSrMjYLj0EM14VNaLlwTnSIsAwIMV1YeCV/xlUZQcJhEEsTphOc4aoINVCg0A1izIHGpgnCVRmBwt8ZsxMoH62AClyVESzsBlkIlCXjM7Tyfi/ghduguQKlHPbM+V7ADM0gei+Mw5453wu4IRlETqJF+4UZyuKGYhDPhYXkm35DoEUhGMTUjT/txicomxkOeMbeIE/jQBbhgE/4+mL2I9G0O85BoGVhM8juWBg9jYZAC8Nl0GyBiLe6nP29wBF2h1Y9nQ/kPRyYj5VBEAjUWBgEgUCD+QZBINBktkEQCLQgd8Yg0MahGgSBtg7RIAi0eWYZhBwIXDDHIAgELpkxpLi0QJjmN0im75ClBXIVDhCZahAEAv3YNgoQCCgsDYJAQGNnEAQChimpNHIgMMwEgyAQGOOqQRAIjHLNIAgExrliEAQCV5jZGYNAoMO8A00QCHSZZRAEApcMG4QcCExh0CAIBCYx1IxBIDCNAYMgEJhKr0EQCExmUmcMAoFBpvTnIRAYZoJBjgQS89+JiRQHZxOCQHHQNchTDiT9+eC5dd8eQjiwHB2D/AgkpyNP5Tx4uFtP7LSbMV8CHcwtn3C/sOhpGeSrCStrnww10FqoDTp6Eui8v30vq6B8KIuGQDFRGXQ8XiyaHGPeV+bJ+HzAECgqxL4U8iiBmhphHAhMQQp0VOocIRCYjzRI5EAtf1wJpO/LO3xfTAgUHdKgx44/jgSSg4hZ2YMfvCMLBIoPYdBjxx83AukxoLQaTqSFAyFwlDweNeZtZwOJhRoDwkDiSjj6FMjUQPeqHaOGA6HQdkfiJgfKxPihSITOezRh6+GoevIekmg5jngz4g8EihBd/XjpxvsOB9wjq5/HAgOJwA5Z+zyaZwackQhm4Oto/OAZiZgnOm48CTTljEQQI8fHi7fcCHT1jMT5QafBHhEBl4h6/YxEi6CTCH9rbjDg/KjXz0i0CDqJ8LfmBgPaRM1VAzl4RqJV0AmEvzU3GNBdVAi0iYDuokKgTQSkRB06Gk8K6jMiAoYcFQJtIqC7qBBoEwEdRgWbwe6qjNEMCGyJeWckJg/qSW6egK1jcU60YPxQBtgOFldlCMYPpoLtgBoIkJiZA+kqCDkQ0MzrhZ33qheG+gdoMA4ESEAgQAICARIQCJCAQIAEq0Cqk3bf84Ilojihdvxk7GmkphPJsorNgCxrmDVisKxhMyDXNqxgFUhedNj7giWiOJX/yun8U8irUQiWVWwG5FhDca5eFYNjDVsBmbZhDatArQMcLEc7mkHUQPjQ3GiTKf+oq/3NckCmDsixhvLqzdcnHYNhDVsBmbZhA1aBsvuhFxwRTzsxDj5+Mu2UkHd/NAKxrGIjINMaNgTiWcM6INsaVrAKlH5cNtgPfS84IqrqnPo3WUapUhaWVWwE5FnDQs/kJWBZw0ZAtjWs4BTovBcbMn24fMESUTXdxAZc1OFmf7OsYjMgyxrKPFevE8saNgMyrWED/m68s0SI5ZcXpxGkrUN5xFVsBmTbPa9PzVVk2IgmYAwCqWa27wUxIkf1K2O0BaKtYisgXwPR2sUcG1EHDLYJy7qpStHzghiRmADKgJmevKTpuO0qXgbkWEO9Uju2NWwFDDuJVmun9W69YInI1gVNW50mhj/HlLEbz74R3WzDCt5emFgxk/K1XrBE5BoEq3thHKvYDMixhiJYde4nxxq2AoY9kFikqjJXow5pMnJXFquIGd+hDMZVbAbkWEP2jehiG1bgYCogAYEACQgESEAgQAICARIQCJCAQIAEBAIkIBAgAYEACQgESEAgQAICARIQCJCAQIAEBAIkIBAgAYEACQgESEAgQAICARIQCJCAQIAEBAIkIBAgAYEACQgESEAgQ+NuaE1enw4DSy4m7mlOWnB+y3kBesBAIMOAJtn90JJRgYp8I3c0gkCGfk3Eu1YClTUX48qFCwQySE1yM6dXmiQ3fxZz6dy+V0v0HCmn3Vf7sshpJ16ddl/udPlMl6/nY9nITR0hkEFokieivrkvNRCzu4uJdMQMT2KJeBRz5Z525Y9M3Pc8u30vX5x2D53yGftMlgEDgQylJmoer3LPq7YpvXmW07yXS2ROLN6VuugfB/moTDLlTTmm+UXDBwIZSk2qPa9mFMyFQIcqO8pVq3Uoqh96+sGb56p8VU7fYmD9QCBDJVD5JDNCyHeEQGWOc/vPXVcgOX1q+bMqX5WDQJtjtAaqvLlSA9WLIdDWuMyBsjoHkobkl02YzIHuXqryVTnkQJtjtBcmbDjvyx57RyDR0Re6ZPKJMk+WQy9sc1yMA93+Q1ikx4Hk7Lhps42SAn25M6M+ehzIlMM4EKgHEW2w/mBkQKA+dOdLZjiWtwXAsbBNk1c3ULE8poWj8QBMAQIBEhAIkIBAgAQEAiQgECABgQAJCARIQCBAAgIBEhAIkIBAgAQEAiQgECABgQAJCARIQCBAAgIBEhAIkIBAgAQEAiT+D3xnLTroBWLfAAAAAElFTkSuQmCC" alt="Weighted error vs. log(lambda) for a single alpha" /></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">autoplot</span>(fit)</span></code></pre></div>
+<p><img role="img" aria-label="ggplot2 version of the error profile for a single alpha" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkAAAAGACAMAAAByRC0tAAABRFBMVEUAAAAAADoAAGYAOjoAOmYAOpAAZpAAZrY6AAA6ADo6AGY6OgA6OmY6OpA6ZmY6ZpA6kLY6kNtGgrRNTU1NTW5NTY5NbqtNjshmAABmADpmOgBmZmZmkNtmtttmtv9uTU1uTW5uTY5ubo5ubqtuq+SOTU2OTW6OTY6Obk2ObquOyP+QOgCQZmaQkGaQkLaQtmaQtpCQttuQ27aQ2/+rbk2rbm6rjk2r5OSr5P+2ZgC2Zjq2kDq2tpC2ttu229u22/+2/9u2///Ijk3I///bkDrbkGbbtmbbtpDb29vb/7bb/9vb///kq27k///r6+v/AAD/ADr/AGb/OgD/Ojr/Omb/OpD/ZgD/Zjr/Zmb/Zrb/kDr/kGb/kLb/kNv/tmb/tpD/tv//yI7/25D/27b/29v/2///5Kv//7b//8j//9v//+T////1QBu0AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAQr0lEQVR4nO2d/2PbxBmHnUCXwDa2LFtrygiUpi1rxgZrGA370qXxvnRJcCm0o2x4rVnjOO////t0J8mSHMf2+X2V+OLngSSKTv5YvHpyd5Jt0RAABY2L3gGIGwQCFQgEKhAIVCAQqEAgUIFAoAKBQMUMArUaGSu6p/680fjB9Sv7/a0r+6cbe2/fK36pbjL6ASP5/nqj8aMHg193/G6vJQtroTsLZ3BxAnWShB9snSVQ5RDPKlCv6XZzeXfwwFyg7hv3xj0OpmcWgQZHREWnseF/jvShU3mOWQVqNX663/9DI3exu7qRt+woe0/I0QnU31ppNZb/7L8/8APG6w/ytX7k6DXXOquN1+8VK/ON3HCy/JdBD1QdbJKN3Y+//bDRWPplqkw56cqj6359sYWkT5Z1jdkOpsmFb52lQb9DF2SFVqDXVhtX/um/7yfHNyE5SOnafbdBr/nWamXlYKOqQN18dUraV2Rj5YakAhVJr19P1xdbSPpkVYF6Ta/hTr6/reXfpgoODAU1ijmQP5ZufBh8f9c1OiUGo0ZyTFfcKLJyaiM/hPUzgfpbS8nqv6/mR9U72t9yvVh3dUVSgUpJycP/6pfyLUbSXfW70cq93CnptmMzDoNWoOxI7w6O487SvfR3T6/pe6LkcA1vVBEoP9T543ayUecff/z1aiMXqJqUdS/ZFiMZEiix9JNk0Ev7xtYSY5gJ2iGsmGVkU9SOE2gwy80OcytfWWxUEahTOFnEZuPaQKBqkh+EBltkT1YdwoZ7oJQd/2s+hQclcyxQ4sNbv/nTo+bZAhVbZE82PAfyAg2NVi0EssRSoGIIKwmUbuAGnupGQ0NY5XCWZSvmQNUkJ1CxxUiGzsKyDin1CYGMsBOoPIkuCZReilk5tdHwJDqZnny/VZkDJWLsu9P7dJPTSSulLUbv6Y57yOf5jN7P1H2CMAcyQ3MluugM/BEsncaXBHptNR1ThjeqCCTZGJafvPnDm104HghUTXICFVuM3tPiSrTvcDqlYZKzMCMMBZLu4EJieQ6UKPOTB6c3qgrkV7/2bv4U6djkrzl+spM+zXCSn0QPtjhjV78vP1n6JD/2Vyu5DmRFza/G95ozHagRx3fGpDPgSrQV8ylQ+VUHZdJoeC3MijkV6PQbLkwFogMyY14FqrwfSJU0Ct4PZAbvSAQVCAQqEAhUIBCoQCBQgUCg4pwF+iLm2HfqibWiptgJhiDQ9LEIFN5sTVy1QyBBIGKVIBCxKhDIOLb75ai1z17kS/0nL0ZtUHpcNbbXbj+tLH3bbreTbbv++5lPOOXe6kEg49hZBToj1m3+7fPyUhrVaye/OZ86bQQqiFqgdBLdTXuH5Pj2v/p3u/1dJ/lKjvo3bo3rRL5OPEjbE0qbJI/rPn3m1ldie1/mTmZL/a9e+adJ5Ok9fiXPHv8XgQouh0DuwLpD/eR5ospzf/yfPU1/fJf0GC+ydpHyJu7fxKPOUxebKJU5losyWOqlLaX1CFRwOQRy9NK+wn35juKFG3tcJ5INYb1UoGKT1CH3VYntDETJlrqP/UP8EIZAw1wWgZ65GW5ZoH+9cgKlbS+ydplGoFM9kF/7zA+D//kKgYaIWqC2/+6GMDfEnOqBkq4n64GydjlboGIIOzUH8jwr9WIIVOJyCORFePyqItDz0hwoa5dpeqD+k+8GZ2F+yY1k/a99aLp+UQT62YxYPHftArWLb+54futPtioCfdN2xvSf+LOwtL3aSZ0hUHb1xzUV14FcVCe/PoRA54TZf8mA0iFpl74MYy2JXaCpGPEfOcfClfe2nf9bSxHmONZcoC/mFXPDqvFt/8/i0Ri9enaBVMzTH1+oT8lp0wXu7YXFzv0QNr+xZXXKaHOjKgICmcXSA83QbE1ctavEtv0/5rF2INBcx3IWNlOzNXHVjutAgkA2se3qN6tYUxBo3mON5tCRFQGBzGIRKLzZmrhqx+fCBIGIVYJAxKpAIGJVIBCxKhDILJZJdHizNXHVDoEEgQxjESi82Zq4aodAgkDEKkEgYlUgELEqEIhYFQhkFsskOrzZmrhqh0CCQIaxCBTebE1ctUMgQSBilSAQsSoQiFgVCESsCgQyi2USHd5sTVy1QyBBIMNYBApvtiau2iGQIBCxShCIWBWzC3R8a/3qoV862V7/+X2TvYmrdsSKQqCT7btycM0vPrwrLzOXlMRVO2JFIdDxnT05urGXLRkRV+2YRItCoKObh3J8+75f+n1pCDvfuxTPE+9c9A5cCDPfJ9oNWplA7931OhkQ1x8fPZAY9UD5kpq4aodAYjMH+hUCLW6s4ixss3QWxhC2qLHa60CuE0qWfmFzIhZX7YgVrkQTqwSBzGKZRIc3WxNX7RBIEMgwFoHCm62Jq3YIJAhErBIEIlYFAhGrAoGIVYFAZrFMosObrYmrdggkCGQYi0DhzdbEVTsEEgQiVgkCEasCgYhVgUDEqkAgs1gm0eHN1sRVOwQSBDKMRaDwZmviqh0CCQIRqwSBiFWBQMSqQCBiVSCQWSyT6PBma+KqHQIJAhnGIlB4szVx1Q6BBIGIVYJAxKpAIGJVIBCxKswFOt+bzM4T3Oa3xOwCqYjrj4+zMGEIM4xFoPBma+KqHQIJAhGrBIGIVYFAxKpAIGJVIJBZLJPo8GZr4qodAgkCGcYi0ITm/tZGPftQEFftEEiCBOo1EYjYYUKGsNaV/Xp2YkBctSNWAnughmd5t55dkdhqR6wwiSZWCQKZxTKJntjcciPYWj074omrdggkgZNoN/vpNWs0KK7aIZDMchrfYRI9OhaBJjQjELGnYQgjVgWTaGJVcBpPrApeTDWLZRI9oZkXU8fHItCkZl5MHRuLQBOaeTF1fCwChTdbE1ftiBUm0cQqYRJNrAom0cSqYBJtFsskOrzZmrhqh0CCQIaxCDSxudVobNQ6EYqrdggkYQLtXHnU3OhvrdSzJ464akeshJ7GuzP5/A1lx7fWrx5mTSfbd032Jq7aESsKgZwzB9eypoN1BFrQ2LDrQI+cQ+k7yo7v7MnRjT2/fPTBhwi0oLFBk+hO6R2JRzcP5fj2fbd48ulnxRB2vncpnie4T3SJyX69vDoQ6GCTOZBwFhbYXPRAyRICCQIFNhdzoIN1x6bF3sRVOwQShUAn25vFWRg90MLGzv5SRnodKO2EEGhhY3ktjFgV0wqUv5eDt3MQW2GGjzbX+L7EuGrHJFq4uYJhLAJNaEag8bEINKmZu3OMjUWgic3+tbA6P5oRV+2IFU7jiVWCQMSq4D3RxKrgPdFmsUyiJzQPvSe6DuKqHQIJAhnGItCk5sp7omshrtohkCjeE10LcdWOWOE0nlglvBZGrAoEIlbF1AK1Bm8o4zrQ6Fgm0ROaucXd+FgECm+2Jq7aIZCECdRd5T3RY2IRaEJzra+CpcRVO2KFORCxSrjROLEqQuZAdV4BSomrdsQKHyw0jGUSHd5sTVy1QyBBIMNYBJrQXIxitZ3Ox1U7BJLZPlhY3wWhuGpHrMz4anxtp2Nx1Y5YQSBilcz02fhxnw0735vMwkUTdJvf7LPxraV7M6g6DXH98TGJFk7jDWMRKLzZmrhqh0AS8lLGBv/Ly/GxCBTebE1ctSNWEIhYJdzehVgV3N6FWBXcncMslkn0hGYEGh+LQJOaub3L2FgEmtjM7V3GxSLQuOZes/Z31EtstSNWAnqgnZovQnviqh2xEjiE+c821ylRXLUjVma5Et3iLIzYgjCB+ltMos+MZRI9qTmZBtX5OobEVjsEkrA7lNX2RsQBcdUOgSTo/UD17ECFuGqHQBLQAyXTn/qvBMVVO2Il+A5lNd9iKq7aESvBp/Et/o+FxFYIvw60w3UgYgvCr0TzjsQzYplEj232r4XVfBkostohkPBqvGEsAoU3WxNX7RBIEIhYJQhErAoEIlYFAhGrAoHMYplEhzdbE1ftEEgQyDAWgcKbrYmrdggkGoGOb61fPfRLR++tr9812Zu4akesKAQ62b4rB9fc0vHt+3L0/n2LvYmrdsSKQqDjO3tydGMvWXrpNHpo0gXFVTtiRSHQ0c1D3/ekFEvne5diuGiC7hNd5uXVkkAn25vT2DqRuP74mESLUQ90fMvGn8hqh0BiMgdKzsJszsFiqx0CieosbDM7C7PzJ7LaIZDorwMlndDBuoOzsMWM5Uo0sSoQiFgVCESsCgQyi2USHd5sTVy1QyBBIMNYBApvtiau2iGQIBCxShCIWBUIRKwKBCJWBQKZxTKJDm+2Jq7aIZAgkGEsAoU3WxNX7RBIEIhYJQhErAoEIlYFAhGrAoHMYplEhzdbE1ftEEgQyDAWgcKbrYmrdggkCESsEgQiVgUCEasCgYhVgUBmsUyiw5utiat2CCQIZBiLQOHN1sRVOwQSBCJWCQIRqwKBiFVhLtD53qUYLpqZ7xNdC3H98TGJFoYww1gECm+2Jq7aIZAgkGEsAoU3WxNX7YgVBCJWCQIRqwKBiFWBQGaxTKLDm62Jq3YIJAhkGItA4c3WxFU7BBIEIlYJAhGrAoGIVYFAxKpAILNYJtHhzdbEVTsEEgQyjEWg8GZr4qodAgkCEasEgYhVgUDEqkAgYlUgkFksk+jwZmviqh0CCQIZxiJQeLM1cdUOgQSBiFWCQMSqQCBiVSAQsSoQyCyWSXR4szVx1Q6BBIEMYxEorPn41vrVw6ElLXHVDoFEIdDJ9l05uFZdUhNX7YgVhUDHd/bk6MZeZUlNXLUjVhQCHd08lOPb9ytL/hEAjYE3Zwv08mquTbGkJq4/PmKlhh5IRVy1YxItzIEMYxEoqPlke3NwFrbJWZggUGhzevXHdT1cB/IgUHizNXHVjlhBIGKVIBCxKhCIWBUIZBbLJDq82Zq4aodAgkCGsQgU3mxNXLVDIJk3geCygUCgAoFABQKBCgQCFQgEKhAIVCAQqEAgUHFJBHKffYyFo/fW12PZ28nvRb0kAh1Ec0j851uO3jf5jEvtTPGZ5Msh0NEHH0Yj0Et3QB7GsbtTfB7nUgh08ulnEQ1hIlafsqudKT4ReCkEOtiMaQ6Ufk4qCqb4THLsAj1cX7+W/J1EIpDbWzczjcSfRemBDtYdsRyU5CwsCtkdizIHiuo0PiJ/pvlMMgKdN2l/GcnuLsx1ILgoEAhUIBCoQCBQgUCgAoFABQJV6L5x7/TK/tbGyPXD23eWd/PF3tujt798IFCFkaK0VkavH96+JJB0ruwb79qcgkAVRoniepNggZJey3rf5hMEquCE6G81GivJcq/ZWPr4zV1pJZ2JW99dbTQaa8nix8nCmvttI/nlo0bDdTZu448SgbKNFqcLQqAKiSj9rRVxX73mWvK1vNvfWvPre82kT2kt73ZXEzVazprsl/LG+UZnDIaXEASqkBx2PxAl3/zPVuZEsv5/+2l7d9X9vrpR+iV7ULJxvpHrkhZjDEOgCs4FN/YkP1v+55sDgRKrktFp6Z5fzL8l7d6VfON8IzcJWrvY/5RzAoEqjBGo11zyk+mxAuUbIdCC4gRy/Uc+hHWKIcyL1RnugbKfg3Ev24ghbEEZMYmWnbWBWN3VYYEGk+gVv3G+EZPoBWX4NN6dmXey0/idZHLzu+bGUA/0UXXjbCPxJ/+LAAKNxckz08sSXEhceNxo5EYn/1JG+KMXpANCoLNpNdLRSWboTXgxFWAqEAhUIBCoQCBQgUCgAoFABQKBiv8DZGfVoGTCb1EAAAAASUVORK5CYII=" alt="ggplot2 version of the error profile for a single alpha" /></p>
+<p>Both show the weighted error across the lambda grid, with the
+selected <code>lambda.min</code> marked.</p>
+</div>
+</div>
+<div id="searching-across-multiple-alphas-with-par_welnet" class="section level2">
+<h2>Searching across multiple alphas with <code>par_wElnet()</code></h2>
+<p>In practice, you’ll usually want to compare several
+<code>alpha</code> values (e.g. a grid spanning ridge to LASSO) rather
+than fixing one in advance. <code>par_wElnet()</code> fits
+<code>wElnet()</code> once per alpha, in parallel across CPU cores, and
+reports the best (alpha, lambda) combination.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>alpha_grid <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="dv">1</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>par_fit <span class="ot">&lt;-</span> <span class="fu">par_wElnet</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">alpha   =</span> alpha_grid,</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="at">n.cores =</span> <span class="dv">2</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="at">data    =</span> survey_data,</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="at">col.y   =</span> <span class="st">&quot;y&quot;</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  <span class="at">col.x   =</span> <span class="fu">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>, <span class="st">&quot;x3&quot;</span>, <span class="st">&quot;x4&quot;</span>),</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="at">family  =</span> <span class="st">&quot;binomial&quot;</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  <span class="at">cluster =</span> <span class="st">&quot;psu&quot;</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  <span class="at">strata  =</span> <span class="st">&quot;strata&quot;</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>  <span class="at">weights =</span> <span class="st">&quot;weight&quot;</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>  <span class="at">method  =</span> <span class="st">&quot;dCV&quot;</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>  <span class="at">k =</span> <span class="dv">4</span>, <span class="at">R =</span> <span class="dv">1</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>)</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>par_fit</span></code></pre></div>
+<pre><code>#&gt; Parallel Weighted Elastic Net over 5 alpha value(s)
+#&gt;
+#&gt;   alpha lambda.min min.error
+#&gt; 1  0.00     0.0847     0.251
+#&gt; 2  0.25     0.0391     0.248
+#&gt; 3  0.50     0.0312     0.246
+#&gt; 4  0.75     0.0288     0.247
+#&gt; 5  1.00     0.0265     0.249
+#&gt;
+#&gt; Best alpha: 0.5</code></pre>
+<p>(This chunk is not evaluated when the vignette is built, since
+spawning a parallel cluster is best avoided in automated/non-interactive
+build environments such as <code>R CMD check</code>. It runs normally in
+an interactive R session or script.)</p>
+<div id="visualizing-results-across-alphas" class="section level3">
+<h3>Visualizing results across alphas</h3>
+<p><code>plot()</code> and <code>autoplot()</code> methods are also
+available for <code>par.w.elnet</code> objects, showing both the error
+profile for every alpha and a summary of the best error achieved by
+each:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">plot</span>(par_fit)                     <span class="co"># both panels: profile + summary</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">plot</span>(par_fit, <span class="at">type =</span> <span class="st">&quot;profile&quot;</span>)   <span class="co"># just the error-vs-lambda curves, one per alpha</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="fu">plot</span>(par_fit, <span class="at">type =</span> <span class="st">&quot;summary&quot;</span>)   <span class="co"># just the best-error-vs-alpha curve</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="fu">autoplot</span>(par_fit)                              <span class="co"># combined (requires patchwork)</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="fu">autoplot</span>(par_fit, <span class="at">type =</span> <span class="st">&quot;profile&quot;</span>, <span class="at">facet =</span> <span class="cn">TRUE</span>)  <span class="co"># one panel per alpha</span></span></code></pre></div>
+</div>
+</div>
+<div id="using-a-surveysvydesign-object-instead" class="section level2">
+<h2>Using a <code>survey::svydesign()</code> object instead</h2>
+<p>If you already have a <code>survey.design</code> object, you can pass
+it directly via the <code>design</code> argument instead of specifying
+<code>cluster</code>/<code>strata</code>/<code>weights</code>
+separately:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>des <span class="ot">&lt;-</span> survey<span class="sc">::</span><span class="fu">svydesign</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="at">ids =</span> <span class="sc">~</span>psu, <span class="at">strata =</span> <span class="sc">~</span>strata, <span class="at">weights =</span> <span class="sc">~</span>weight,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="at">nest =</span> <span class="cn">TRUE</span>, <span class="at">data =</span> survey_data</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>)</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>fit_des <span class="ot">&lt;-</span> <span class="fu">wElnet</span>(</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  <span class="at">col.y =</span> <span class="st">&quot;y&quot;</span>, <span class="at">col.x =</span> <span class="fu">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>, <span class="st">&quot;x3&quot;</span>, <span class="st">&quot;x4&quot;</span>),</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  <span class="at">design =</span> des,</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>  <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;dCV&quot;</span>, <span class="at">k =</span> <span class="dv">4</span>, <span class="at">R =</span> <span class="dv">1</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>)</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>fit_des<span class="sc">$</span>alpha</span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt; [1] 0.5</span></span></code></pre></div>
+</div>
+<div id="other-replicate-weight-methods" class="section level2">
+<h2>Other replicate-weight methods</h2>
+<p><code>method</code> also accepts <code>&quot;JKn&quot;</code> (jackknife),
+<code>&quot;BRR&quot;</code>, <code>&quot;bootstrap&quot;</code>,
+<code>&quot;subbootstrap&quot;</code>, <code>&quot;split&quot;</code>, and
+<code>&quot;extrapolation&quot;</code>, each implemented via
+[replicate_weights()]. For example, a jackknife fit:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>fit_jkn <span class="ot">&lt;-</span> <span class="fu">wElnet</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="at">data =</span> survey_data, <span class="at">col.y =</span> <span class="st">&quot;y&quot;</span>, <span class="at">col.x =</span> <span class="fu">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>, <span class="st">&quot;x3&quot;</span>, <span class="st">&quot;x4&quot;</span>),</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="at">cluster =</span> <span class="st">&quot;psu&quot;</span>, <span class="at">strata =</span> <span class="st">&quot;strata&quot;</span>, <span class="at">weights =</span> <span class="st">&quot;weight&quot;</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;JKn&quot;</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>)</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>fit_jkn</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt; Weighted Elastic Net (wElnet)</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt; alpha:             0.5 </span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt; lambda (min):      0.05908 </span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt; Weighted error at min: 0.6958 </span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt; Nonzero coefs:     0 </span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt; Lambda grid size:  29</span></span></code></pre></div>
+<p>See <code>?replicate_weights</code> for details on each method and
+how its training/test replicate-weight columns are constructed.</p>
+<p><strong>Note:</strong> Global options to avoid only one PSU in a
+stratum in a particular domain or subpopulation can be set at the
+beginning when getting errors with other methods:</p>
+<pre><code>#&gt;  options(survey.adjust.domain.lonely=TRUE)
+#&gt;  options(survey.lonely.psu=&quot;adjust&quot;)</code></pre>
+</div>
+<div id="next-steps" class="section level2">
+<h2>Next steps</h2>
+<ul>
+<li><code>?wXGBoost</code> and <code>?wRandomforest</code> extend the
+same replicate-weight framework to gradient boosting and random
+forests.</li>
+<li><code>?optim_wxgb_para</code> automates hyperparameter search for
+<code>wXGBoost()</code>.</li>
+<li>See the function reference index for the complete list of available
+models, utilities, and plotting methods.</li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

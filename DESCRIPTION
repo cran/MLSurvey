@@ -1,0 +1,24 @@
+Package: MLSurvey
+Title: Machine Learning for Complex Survey Data
+Version: 1.0.2
+Authors@R: 
+    person("Hyeonju", "Kim", , "hyeonjukm01@gmail.com", role = c("aut", "cre"),
+    comment=c(ORCID = "0000-0002-2368-4850"))
+Description: Fits weighted machine learning models for complex survey data using a replicate weights approach that accounts for sampling weights, strata, and clusters. Weighted versions of Elastic Net, XGBoost, and random forest are provided for linear and logistic regression, along with parallelized tuning-parameter search and companion plotting methods.
+License: GPL (>= 3)
+Encoding: UTF-8
+Imports: glmnet, ggplot2, graphics, grDevices, parallel, randomForest,
+        rlang, stats, survey, svyROC, utils, xgboost
+Suggests: Matrix, knitr, rmarkdown, RhpcBLASctl, patchwork, testthat
+        (>= 3.0.0)
+Config/testthat/edition: 3
+LazyData: true
+Config/roxygen2/version: 8.0.0
+VignetteBuilder: knitr
+NeedsCompilation: no
+Packaged: 2026-10-31 04:41:54 UTC; Hyeonju.Kim
+Author: Hyeonju Kim [aut, cre] (ORCID: <https://orcid.org/0000-0002-2368-4850>)
+Maintainer: Hyeonju Kim <hyeonjukm01@gmail.com>
+Depends: R (>= 3.5.0)
+Repository: CRAN
+Date/Publication: 2026-11-18 09:50:21 UTC
